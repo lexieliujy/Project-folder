@@ -24,3 +24,12 @@ npm-debug.log*
 # Large data, opt-in
 data/raw/
 *.csv.gz
+
+# Local duplicates created by Finder/downloads
+* 2.*
+
+# Keep repository lightweight for GitHub while preserving local files
+code/vendor/
+data/ACLED Data_MENA_Raw*.csv
+data/ACLED Data_MENA_Raw*.numbers
+data/acled_mena_processed*.csv
