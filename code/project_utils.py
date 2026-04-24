@@ -400,6 +400,181 @@ def build_map_figure(df: pd.DataFrame) -> go.Figure:
             point["capital"] = capital
             capital_points.append(point)
     capitals_df = pd.DataFrame(capital_points)
+    
+    world_geojson = _load_world_geojson()
+    
+    # Create year range from 1997 to 2025
+    min_year = int(plot_df["year"].min()) if len(plot_df) > 0 else 1997
+    max_year = 2025
+    year_range = list(range(min_year, max_year + 1))
+    
+    # Create frames for animation
+    frames = []
+    for year in year_range:
+        frame_data = []
+        
+        # Add background map (choropleth)
+        frame_data.append(
+            go.Choroplethmap(
+                geojson=world_geojson,
+                locations=[feature["properties"]["country_name"] for feature in world_geojson["features"]],
+                z=[1] * len(world_geojson["features"]),
+                featureidkey="properties.country_name",
+                colorscale=[[0, "#f7f3eb"], [1, "#f7f3eb"]],
+                showscale=False,
+                hoverinfo="skip",
+                marker={"line": {"color": "#6b7280", "width": 1.0}},
+                name="Country borders",
+                showlegend=False,
+            )
+        )
+        
+        # Add event markers for this year
+        for category, color in [
+            ("Capital-area remote attacks", PALETTE["capital_remote"]),
+            ("Border-proximate battles", PALETTE["border_battles"]),
+        ]:
+            sub = plot_df[(plot_df["map_category"] == category) & (plot_df["year"] == year)].copy()
+            sub["event_date_str"] = sub["event_date"].dt.strftime("%Y-%m-%d")
+            frame_data.append(
+                go.Scattermap(
+                    lat=sub["latitude"],
+                    lon=sub["longitude"],
+                    ids=sub["event_date_str"],
+                    mode="markers",
+                    name=category,
+                    customdata=sub[
+                        [
+                            "country",
+                            "event_date_str",
+                            "year",
+                            "event_type",
+                            "sub_event_type",
+                            "fatalities",
+                            "border_distance_km",
+                        ]
+                    ],
+                    text=sub["location"],
+                    hovertemplate=(
+                        "%{text}<br>%{customdata[0]}<br>Date %{customdata[1]} (Year %{customdata[2]})"
+                        "<br>%{customdata[3]} | %{customdata[4]}"
+                        "<br>Fatalities %{customdata[5]}"
+                        "<br>Border distance %{customdata[6]:.1f} km<extra></extra>"
+                    ),
+                    marker={
+                        "size": sub["marker_size"],
+                        "color": color,
+                        "opacity": 0.62,
+                    },
+                )
+            )
+        
+        # Add capital markers with labels for this year
+        if not capitals_df.empty:
+            frame_data.append(
+                go.Scattermap(
+                    lat=capitals_df["latitude"],
+                    lon=capitals_df["longitude"],
+                    text=capitals_df.apply(lambda row: f"{row['country']}<br>{row['capital']}", axis=1),
+                    mode="markers+text",
+                    name="Capital cities",
+                    textposition="top center",
+                    hovertemplate="%{customdata[1]}<br>%{customdata[0]}<extra></extra>",
+                    customdata=capitals_df[["country", "capital"]],
+                    marker={
+                        "size": 11,
+                        "symbol": "diamond",
+                        "color": "#111827",
+                    },
+                    textfont={"size": 9, "color": "#111827"},
+                    showlegend=False,
+                )
+            )
+        
+        frames.append(go.Frame(data=frame_data, name=str(year)))
+    
+    # Create initial figure with first year data
+    fig = go.Figure(data=frames[0].data, frames=frames)
+    
+    # Update layout with slider
+    sliders = [
+        {
+            "active": 0,
+            "yanchor": "top",
+            "y": -0.05,
+            "xanchor": "left",
+            "x": 0,
+            "len": 0.9,
+            "transition": {"duration": 300},
+            "pad": {"b": 10, "t": 50},
+            "currentvalue": {
+                "prefix": "Year: ",
+                "visible": True,
+                "xanchor": "center",
+                "font": {"size": 16},
+            },
+            "steps": [
+                {
+                    "args": [
+                        [str(year)],
+                        {
+                            "frame": {"duration": 300, "redraw": True},
+                            "mode": "immediate",
+                            "transition": {"duration": 300},
+                        },
+                    ],
+                    "label": str(year),
+                    "method": "animate",
+                }
+                for year in year_range
+            ],
+        }
+    ]
+    
+    fig.update_layout(
+        template="plotly_white",
+        height=560,
+        margin={"l": 20, "r": 20, "t": 70, "b": 100},
+        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0},
+        title="Spatial contrast between capital-area remote attacks and border-proximate battles",
+        map={
+            "style": "white-bg",
+            "center": {"lat": 31, "lon": 31},
+            "zoom": 3.05,
+            "bearing": 0,
+            "pitch": 0,
+        },
+        sliders=sliders,
+    )
+    return fig
+
+
+def build_geography_map_figure(df: pd.DataFrame) -> go.Figure:
+    max_points_per_category = 18000
+    plot_df = df[df["is_capital_area"] | df["is_border_proximate"]].copy()
+    plot_df["map_category"] = "Border-proximate events"
+    plot_df.loc[plot_df["is_capital_area"], "map_category"] = "Capital-area events"
+    plot_df["display_fatalities"] = plot_df["fatalities"].clip(lower=0).fillna(0)
+    plot_df["marker_size"] = (
+        plot_df["display_fatalities"].clip(upper=400).pow(0.5) * 1.6 + 6.2
+    ).round(1)
+
+    capital_points = []
+    for country, capital in CAPITALS_BY_COUNTRY.items():
+        capital_rows = df[
+            (df["country"] == country)
+            & (
+                df["location"].astype(str).eq(capital)
+                | df["location"].astype(str).str.startswith(f"{capital} -")
+            )
+        ][["latitude", "longitude"]].drop_duplicates()
+        if len(capital_rows):
+            point = capital_rows.iloc[0].to_dict()
+            point["country"] = country
+            point["capital"] = capital
+            capital_points.append(point)
+
+    capitals_df = pd.DataFrame(capital_points)
     world_geojson = _load_world_geojson()
     fig = go.Figure()
     fig.add_trace(
@@ -416,59 +591,81 @@ def build_map_figure(df: pd.DataFrame) -> go.Figure:
             showlegend=False,
         )
     )
+
     for category, color in [
-        ("Capital-area remote attacks", PALETTE["capital_remote"]),
-        ("Border-proximate battles", PALETTE["border_battles"]),
+        ("Capital-area events", PALETTE["capital_remote"]),
+        ("Border-proximate events", PALETTE["border_battles"]),
     ]:
         sub = plot_df[plot_df["map_category"] == category].copy()
+        if len(sub) > max_points_per_category:
+            # Keep a deterministic time-spread sample so browser rendering stays reliable.
+            sub = sub.sort_values("event_date")
+            step = len(sub) / max_points_per_category
+            keep_idx = [int(i * step) for i in range(max_points_per_category)]
+            sub = sub.iloc[keep_idx].copy()
+        sub["event_date_str"] = sub["event_date"].dt.strftime("%Y-%m-%d")
+        custom_cols = [
+            "latitude",
+            "longitude",
+            "country",
+            "event_date_str",
+            "year",
+            "event_type",
+            "sub_event_type",
+            "fatalities",
+            "border_distance_km",
+            "marker_size",
+        ]
+        customdata = sub[custom_cols].values.tolist()
         fig.add_trace(
             go.Scattermap(
-                lat=sub["latitude"],
-                lon=sub["longitude"],
+                lat=sub["latitude"].tolist(),
+                lon=sub["longitude"].tolist(),
+                ids=sub["event_date_str"].tolist(),
                 mode="markers",
                 name=category,
-                customdata=sub[
-                    ["country", "year", "event_type", "sub_event_type", "fatalities", "border_distance_km"]
-                ],
-                text=sub["location"],
+                customdata=customdata,
+                text=sub["location"].astype(str).tolist(),
                 hovertemplate=(
-                    "%{text}<br>%{customdata[0]}<br>Year %{customdata[1]}"
-                    "<br>%{customdata[2]} | %{customdata[3]}"
-                    "<br>Fatalities %{customdata[4]}"
-                    "<br>Border distance %{customdata[5]:.1f} km<extra></extra>"
+                    "%{text}<br>%{customdata[2]}<br>Date %{customdata[3]} (Year %{customdata[4]})"
+                    "<br>%{customdata[5]} | %{customdata[6]}"
+                    "<br>Fatalities %{customdata[7]}"
+                    "<br>Border distance %{customdata[8]:.1f} km<extra></extra>"
                 ),
                 marker={
-                    "size": sub["marker_size"],
+                    "size": sub["marker_size"].tolist(),
                     "color": color,
-                    "opacity": 0.62,
+                    "opacity": 0.78,
                 },
             )
         )
+
     if not capitals_df.empty:
         fig.add_trace(
             go.Scattermap(
-                lat=capitals_df["latitude"],
-                lon=capitals_df["longitude"],
+                lat=capitals_df["latitude"].tolist(),
+                lon=capitals_df["longitude"].tolist(),
                 text=[""] * len(capitals_df),
                 mode="markers",
                 name="Capital cities",
                 textposition="top center",
                 hovertemplate="%{customdata[1]}<br>%{customdata[0]}<extra></extra>",
-                customdata=capitals_df[["country", "capital"]],
+                customdata=capitals_df[["country", "capital"]].values.tolist(),
                 marker={
-                    "size": 11,
+                    "size": 10,
                     "symbol": "diamond",
                     "color": "#111827",
                 },
                 textfont={"size": 10, "color": "#111827"},
             )
         )
+
     fig.update_layout(
         template="plotly_white",
         height=560,
         margin={"l": 20, "r": 20, "t": 70, "b": 20},
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0},
-        title="Spatial contrast between capital-area remote attacks and border-proximate battles",
+        title="Spatial contrast between capital-area events and border-proximate events",
         map={
             "style": "white-bg",
             "center": {"lat": 31, "lon": 31},
