@@ -95,6 +95,12 @@ Analytical sample:
   - `Border-proximate event`: an event within 50 km of an international land border.
   - `Spatial bucket`: capital areas, border-proximate areas, and other areas.
 
+## Research motivation
+
+The research question was developed from my interest in the international relations of the Middle East and North Africa. In studying recent regional conflicts and reviewing example ACLED analysis materials, I noticed the sharp increase in remote attacks, especially drone-related violence. This led me to ask whether the growing use of remote attack methods might be connected to changing conflict intensity and strategic behavior in the MENA region.
+
+The analysis ultimately does not support my initial expectation of a broad shift from border-proximate conflict toward capital targeting. I still treat the question as analytically useful because the negative finding clarifies what the rise of remote violence does and does not appear to change in the spatial organization of conflict.
+
 ## Main analysis
 
 The report asks whether remote violence is associated with a shift from frontier conflict toward capital targeting.
