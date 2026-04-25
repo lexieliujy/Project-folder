@@ -5,6 +5,9 @@ This repository contains the final project files for POLI3148: Data Science in P
 ## Report
 
 - [`docs/index.html`](docs/index.html): canonical final HTML report for submission and GitHub Pages.
+- Public webpage: <https://lexieliujy.github.io/POLI3148_PS1/>
+- Repository: <https://github.com/lexieliujy/POLI3148_PS1>
+- GitHub Pages source: `main` branch, `/docs` folder.
 - [`note_on_ai_use.md`](note_on_ai_use.md): final AI use statement.
 
 ## Code
@@ -27,7 +30,11 @@ The analytical sample combines `Middle East` and `Northern Africa` ACLED records
 
 ## Notes
 
+This project keeps one final report version: `docs/index.html` is the only submission webpage, and future edits should be applied directly to that canonical report baseline.
+
 The final webpage's Figure 4 map uses a yearly time slider, so each selected year shows only that year's event points rather than cumulative totals.
+
+To update the published webpage, edit files under `docs/`, commit the changes, and push to `main`. GitHub Pages rebuilds automatically from the `/docs` folder.
 
 ## Author
 
