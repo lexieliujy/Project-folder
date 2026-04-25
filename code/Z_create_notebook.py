@@ -63,9 +63,13 @@ DATA_CLEANING_NOTEBOOK = notebook(
         code_cell(
             """
             from pathlib import Path
+            import subprocess
             import sys
 
             import pandas as pd
+
+            REPO_URL = "https://github.com/lexieliujy/POLI3148_PS1.git"
+
 
             def find_project_root(start: Path) -> Path:
                 for candidate in [start, *start.parents]:
@@ -74,7 +78,12 @@ DATA_CLEANING_NOTEBOOK = notebook(
                 raise FileNotFoundError("Could not find the project root folder.")
 
 
-            ROOT_DIR = find_project_root(Path.cwd())
+            try:
+                ROOT_DIR = find_project_root(Path.cwd())
+            except FileNotFoundError:
+                ROOT_DIR = Path.cwd() / "POLI3148_PS1"
+                if not (ROOT_DIR / "code" / "project_utils.py").exists():
+                    subprocess.run(["git", "clone", REPO_URL, str(ROOT_DIR)], check=True)
 
             CODE_DIR = ROOT_DIR / "code"
             DATA_DIR = ROOT_DIR / "data"
@@ -93,6 +102,14 @@ DATA_CLEANING_NOTEBOOK = notebook(
             YEARLY_SUMMARY_PATH = DATA_DIR / "yearly_shift_summary.csv"
             SPATIAL_SUMMARY_PATH = DATA_DIR / "spatial_bucket_summary.csv"
             COUNTRY_SUMMARY_PATH = DATA_DIR / "country_pattern_summary.csv"
+
+            if not RAW_DATA_PATH.exists():
+                raise FileNotFoundError(f"Raw data file not found: {RAW_DATA_PATH}")
+            if RAW_DATA_PATH.read_text(errors="ignore", encoding="utf-8")[:80].startswith("version https://git-lfs"):
+                raise RuntimeError(
+                    "The raw CSV is still a Git LFS pointer. Run `git lfs pull` in the project folder, "
+                    "or download the LFS files from GitHub before running the cleaning notebook."
+                )
 
             RAW_DATA_PATH
             """
@@ -201,10 +218,14 @@ ANALYSIS_NOTEBOOK = notebook(
         code_cell(
             """
             from pathlib import Path
+            import subprocess
             import sys
 
             import pandas as pd
             import plotly.graph_objects as go
+
+            REPO_URL = "https://github.com/lexieliujy/POLI3148_PS1.git"
+
 
             def find_project_root(start: Path) -> Path:
                 for candidate in [start, *start.parents]:
@@ -213,7 +234,12 @@ ANALYSIS_NOTEBOOK = notebook(
                 raise FileNotFoundError("Could not find the project root folder.")
 
 
-            ROOT_DIR = find_project_root(Path.cwd())
+            try:
+                ROOT_DIR = find_project_root(Path.cwd())
+            except FileNotFoundError:
+                ROOT_DIR = Path.cwd() / "POLI3148_PS1"
+                if not (ROOT_DIR / "code" / "project_utils.py").exists():
+                    subprocess.run(["git", "clone", REPO_URL, str(ROOT_DIR)], check=True)
 
             CODE_DIR = ROOT_DIR / "code"
             DATA_DIR = ROOT_DIR / "data"
@@ -226,6 +252,9 @@ ANALYSIS_NOTEBOOK = notebook(
             yearly = pd.read_csv(DATA_DIR / "yearly_shift_summary.csv")
             spatial = pd.read_csv(DATA_DIR / "spatial_bucket_summary.csv")
             country = pd.read_csv(DATA_DIR / "country_pattern_summary.csv")
+
+            if processed.empty:
+                raise RuntimeError("Processed data loaded as empty; check the data files.")
 
             report_df = processed[processed["year"].between(1997, 2024)].copy()
             report_df.shape
