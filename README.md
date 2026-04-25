@@ -19,7 +19,7 @@ For authoritative data, documentation, and citation information, use the origina
 - ACLED: <https://acleddata.com/>
 - Natural Earth: <https://www.naturalearthdata.com/>
 
-See [`note_on_ai_use.md`](note_on_ai_use.md) for the AI use statement.
+See [`Note on AI Use.pdf`](Note%20on%20AI%20Use.pdf) for the AI use statement.
 
 ## What's in this repo
 
@@ -35,7 +35,7 @@ See [`note_on_ai_use.md`](note_on_ai_use.md) for the AI use statement.
 | [`data/country_pattern_summary.csv`](data/country_pattern_summary.csv) | Country-level summary statistics. |
 | [`data/support/ne_50m_admin_0_countries.zip`](data/support/ne_50m_admin_0_countries.zip) | Natural Earth country boundary data used for border-distance calculations. |
 | [`requirements.txt`](requirements.txt) | Python packages needed to run the two notebooks on another computer. |
-| [`note_on_ai_use.md`](note_on_ai_use.md) | Statement describing how AI assistance was used in the project workflow. |
+| [`Note on AI Use.pdf`](Note%20on%20AI%20Use.pdf) | Statement describing how AI assistance was used in the project workflow. |
 
 ## Running the project
 
