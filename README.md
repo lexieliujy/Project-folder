@@ -112,25 +112,23 @@ The analysis ultimately does not support my initial expectation of a broad shift
 
 The report asks whether remote violence is associated with a shift from frontier conflict toward capital targeting.
 
-The project focuses on four descriptive checks:
+The report highlights several findings:
 
-1. Whether capital-area remote attacks become a larger share of all remote violence.
-2. Whether border-proximate remote violence remains more common than capital-area remote violence.
-3. Whether yearly all-event shares show a spatial shift toward capital areas.
-4. Whether the map-level geography supports or weakens the capital-shift expectation.
+1. Remote attacks expanded, but the strategic center of conflict remained border-oriented.
+2. MENA Looks Like Layered Conflict, Not a Clean Spatial Transition
 
-The main descriptive conclusion is that border-linked space remains the heavier conflict geography in MENA relative to capital space. The data do not support a simple regional story in which conflict moved from borders to capitals.
+The main descriptive conclusion is that border-linked space remains the heavier conflict geography in MENA relative to capital space. 
 
 ## Design choices
 
 - Single public report page: `docs/index.html`.
 - GitHub Pages uses the `/docs` folder so the report is accessible as a webpage.
 - The notebooks are self-contained: data cleaning logic is in `01_data_cleaning.ipynb`, and analysis / figure logic is in `02_analysis.ipynb`.
-- Figure 4 uses a yearly time slider so each selected year shows that year's event points rather than cumulative totals.
 
 ## Author
 
-Liu Jing Yi  
+Name: Liu Jing Yi  
 UID: 3035844247  
-POLI 3148: Data Science in Politics and Public Administration  
-Spring 2026
+Institution: the University of Hong Kong 
+Course: POLI 3148 Data Science in Politics and Public Administration  
+Time: Spring 2026
