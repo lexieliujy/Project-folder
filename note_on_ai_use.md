@@ -2,7 +2,7 @@
 
 I used an AI coding assistant as a technical collaborator for workflow execution, report-format synchronization, and repository publishing during this assignment.
 
-My substantive research question, interpretation, and final written argument are my own. The finalized report text was authored and revised by me in `Expanded Report text.docx`, then synchronized into the project webpage and supporting files.
+At the beginning of the workflow, I provided the assignment instructions and my draft report materials to the AI assistant so it could help translate the requirements into a reproducible project structure and an initial technical workflow. My substantive research question, interpretation, and final written argument are my own. The finalized report text was authored and revised by me in `Expanded Report text.docx`, then synchronized into the project webpage and supporting files.
 
 AI support was mainly used for:
 
