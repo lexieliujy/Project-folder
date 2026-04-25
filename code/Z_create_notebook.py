@@ -2,125 +2,410 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from textwrap import dedent
 
 
 def markdown_cell(text: str) -> dict:
+    text = dedent(text).strip()
     return {
         "cell_type": "markdown",
         "metadata": {},
-        "source": [line + "\n" for line in text.strip().splitlines()],
+        "source": [line + "\n" for line in text.splitlines()],
     }
 
 
-REPORT_TEXT = """
-# Final Report Text Mirror
-
-This notebook mirrors the finalized report baseline published in `docs/index.html`.
-
----
-
-**MENA Conflict Geography: From Border Clashes to Capital Attacks?**
-
-Has the rise of drones and other remote attacks in the Middle East and North Africa (MENA) been accompanied by a spatial shift from border-proximate clashes toward attacks on capital areas?
-
-**Research Question and Framing**
-
-In recent years, the use of drones and other forms of remote violence has increased significantly in conflicts worldwide (Carboni & Ciro, 2025). Compared to traditional modes of attack, remote methods enable strikes over longer distances at lower cost than conventional missiles, making them accessible even to relatively resource-constrained militant groups. These technologies also reduce the need for territorial proximity, potentially allowing actors to bypass frontlines and directly target politically or symbolically significant locations.
-
-Against this backdrop, this report examines whether the rise of remote violence in the MENA region has been accompanied by a spatial shift, from traditional border clashes toward attacks targeting capital areas. This expectation reflects a plausible strategic intuition: as the cost of projecting force over distance declines, conflict actors may increasingly target politically significant locations rather than remain confined to geographically constrained battle zones.
-
-At the same time, existing research on civil war and irregular conflict suggests that violence remains closely tied to territorial control, logistics, and cross-border networks, which are often concentrated in frontier regions. This creates a tension between two competing expectations: one emphasizing technological transformation and spatial reach, and the other emphasizing enduring territorial constraints.
-
-It is important to emphasize, however, that this analysis does not seek to establish a causal relationship between the proliferation of remote attack technologies and any potential spatial transformation, as such causal inference is beyond the scope of the available data. Instead, the analysis evaluates whether the observed spatial distribution of conflict events is consistent with the expectation of a shift toward capital targeting.
-
-**Data and Geographic Definitions**
-
-The cleaned sample used in this report (1997-2024) comprises 343,901 ACLED observations, after applying missing-value cleaning and excluding the 2025 records. The dataset retains an event-level structure, allowing for fine-grained spatial and temporal analysis of conflict patterns across the region. The large number of observations also makes it possible to identify aggregate trends that may not be visible at the level of individual conflicts.
-
-Geographic definitions are constructed using event coordinates together with an international-border distance measure based on Natural Earth boundaries, providing a reproducible spatial proxy. This approach prioritizes consistency and scalability across countries. By contrast, a notes-based keyword approach identifying events based on explicit references to "border" or "cross-border" in the notes field is too narrow and likely to undercount relevant events, as many border dynamics are not explicitly labeled in textual descriptions.
-
-A **Capital-area event** is defined as any event located in a national capital or in a sub-location whose name begins with that capital. This broader definition helps capture administrative and urban spillover zones that are functionally part of capital regions, rather than restricting the analysis to narrowly defined city centers.
-
-A **Border-proximate event** is defined as any event occurring within 50 km of an international land border. This threshold reflects a compromise between capturing meaningful cross-border dynamics and avoiding excessive inclusion of interior events that are unlikely to be directly shaped by frontier conditions.
-
-A key caveat concerns overlap between these categories, as some capitals are geographically close to borders. In this sample, 1,531 events satisfy both definitions. This overlap is explicitly reported and incorporated into the analysis to avoid imposing a misleading binary distinction between capital and border spaces. Rather than treating these categories as mutually exclusive, the analysis recognizes that some locations may simultaneously exhibit characteristics of both.
-
-**Remote attacks expanded, but the strategic center of conflict remained border-oriented.**
-
-**Capital targeting did not become the dominant remote-war pattern.**
-
-Contrary to the expectation, the empirical findings do not support the hypothesis. Remote violence is already widespread across the MENA sample and constitutes a dominant form of conflict in many years. Yet, only 2.72% of such events occur in capital areas, and their share within remote violence shows no sustained increase over time. This suggests that even as the means of delivering violence evolve, the spatial distribution of that violence does not necessarily follow the same trajectory.
-
-Even when focusing on remote violence, where any shift toward capital targeting should be most visible, border-proximate events account for a larger share than capital-area events in most years, with the gap widening after the mid-2010s. This widening gap is particularly notable because it occurs precisely during the period when remote technologies become more prevalent, reinforcing the conclusion that technological change has not overridden existing spatial patterns.
-
-At the aggregate level, border-proximate remote events total 116,845 (56.05%), compared to 5,673 (2.72%) events in capital areas. The magnitude of this difference is substantial and cannot be explained by short-term fluctuations or measurement artifacts alone.
-
-These patterns indicate that the expansion of remote attack methods has not been accompanied by a spatial reorientation of conflict toward capital areas, with activity remaining more concentrated in border-proximate regions. In other words, the increased capacity to strike at a distance has not translated into a systematic shift toward capital-focused conflict.
-
-Figure 1. Within remote attacks, border-proximate share remains above capital-area share across most years.
-
-**Border zones remained the region's core strategic battlespace.**
-
-This pattern extends beyond remote violence and remains visible in the overall distribution of conflict events. Border-proximate events consistently account for a larger share of total activity than capital-area events throughout the period. This suggests that the observed pattern is not confined to a specific mode of warfare, but reflects a broader structural feature of conflict geography in the region.
-
-At the aggregate level, border-proximate events total 165,192 (48.03%), compared to 11,081 (3.22%) in capital areas. The persistence of this gap across both remote and non-remote categories further strengthens the conclusion that border regions play a central role in organizing conflict activity.
-
-The presence of overlap between Capital-area events and Border-proximate events does not compromise this pattern. While 1,531 events fall into both classifications, non-capital border-proximate events still number 163,661, indicating that the prominence of border regions is not simply driven by capitals located near borders.
-
-Taken together, this means that conflict in MENA remains closely tied to borderlands, border crossings, and transboundary military activity despite the growing capacity to project force across distance. Far from being peripheral, these areas appear to function as critical operational zones where control over movement, supply routes, and cross-border linkages can be established and contested (Salehyan, 2007). In this sense, the persistence and, in some cases, increasing prominence of border-proximate violence indicates that territorial considerations remain central to the conduct of war.
-
-This interpretation is consistent with existing research emphasizing that violence tends to concentrate in areas of contested control rather than in symbolically salient locations (Kalyvas, 2006), and that remote or air-based strikes, while expanding the reach of violence, are limited in their ability to produce decisive outcomes without corresponding territorial pressure (Pape, 2005).
-
-Figure 2. On the all-event denominator, border share still remains above capital share.
-
-**Simple Spatial Map**
-
-The final webpage also includes a simplified map focused on the contrast between capital-area events and border-proximate events. Its time slider is yearly rather than cumulative, so each selected year shows only that year's event points.
-
-Figure 4. Simple map with country borders, capital names, and a year slider for yearly event points.
-
-**Conclusion and Implications**
-
-The evidence supports one stable conclusion: border-linked space remains the heavier conflict geography in MENA relative to capital space. It does not support a neat regional story in which MENA conflict moved from borders to capitals. What the data show instead is a layered conflict geography. Remote violence is highly prevalent, but capital-area remote attacks remain only a small subset of it. Border-proximate battles also persist at meaningful levels rather than fading away.
-
-The analysis still has limits: first, the border measure now uses an approximate distance-to-border rule based on Natural Earth country polygons and a 50-kilometer threshold, so it is a spatial proxy rather than a perfect identification of all frontier conflict; second, the capital-area rule is broader than an exact-city match, but it still cannot capture every attempt to influence a capital from nearby locations; finally, the analysis focuses on event counts rather than intensity or strategic impact, meaning that it does not distinguish between low-level incidents and high-impact attacks.
-
-**References**
-
-ACLED. "Codebook." https://acleddata.com/knowledge-base/codebook/.
-
-Carboni, Andrea, and Ciro Murillo. "What's driving conflict today? A review of global trends." ACLED, 11 December 2025. https://acleddata.com/report/whats-driving-conflict-today-review-global-trends.
-
-Kalyvas, S. N. (2006). The logic of violence in civil war. Cambridge University Press.
-
-Pape, R. A. (2005). Dying to win: The strategic logic of suicide terrorism. Random House.
-
-Salehyan, I. (2007). Transnational Rebels: Neighboring States as Sanctuary for Rebel Groups. World Politics, 59(2), 217-242. https://doi.org/10.1353/wp.2007.0024.
-"""
+def code_cell(text: str) -> dict:
+    text = dedent(text).strip()
+    return {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [line + "\n" for line in text.splitlines()],
+    }
 
 
-NOTEBOOK = {
-    "cells": [markdown_cell(REPORT_TEXT)],
-    "metadata": {
-        "kernelspec": {
-            "display_name": "Python 3",
-            "language": "python",
-            "name": "python3",
+def notebook(cells: list[dict]) -> dict:
+    return {
+        "cells": cells,
+        "metadata": {
+            "kernelspec": {
+                "display_name": "Python 3",
+                "language": "python",
+                "name": "python3",
+            },
+            "language_info": {
+                "name": "python",
+                "version": "3.12",
+            },
         },
-        "language_info": {
-            "name": "python",
-            "version": "3.12",
-        },
-    },
-    "nbformat": 4,
-    "nbformat_minor": 5,
-}
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+
+
+DATA_CLEANING_NOTEBOOK = notebook(
+    [
+        markdown_cell(
+            """
+            # 01 Data Cleaning and Summary Generation
+
+            This notebook documents how the project moves from the raw ACLED export to the processed event-level CSV and the summary CSV files used by the report.
+
+            Outputs generated here:
+
+            - `data/acled_mena_processed.csv`
+            - `data/yearly_shift_summary.csv`
+            - `data/spatial_bucket_summary.csv`
+            - `data/country_pattern_summary.csv`
+            """
+        ),
+        code_cell(
+            """
+            from pathlib import Path
+            import sys
+
+            import pandas as pd
+
+            ROOT_DIR = Path.cwd()
+            if ROOT_DIR.name == "code":
+                ROOT_DIR = ROOT_DIR.parent
+
+            CODE_DIR = ROOT_DIR / "code"
+            DATA_DIR = ROOT_DIR / "data"
+            if str(CODE_DIR) not in sys.path:
+                sys.path.insert(0, str(CODE_DIR))
+
+            from project_utils import (
+                prepare_analysis_data,
+                summarize_country_patterns,
+                summarize_spatial_bucket,
+                summarize_yearly,
+            )
+
+            RAW_DATA_PATH = DATA_DIR / "ACLED Data_MENA_Raw.csv"
+            PROCESSED_PATH = DATA_DIR / "acled_mena_processed.csv"
+            YEARLY_SUMMARY_PATH = DATA_DIR / "yearly_shift_summary.csv"
+            SPATIAL_SUMMARY_PATH = DATA_DIR / "spatial_bucket_summary.csv"
+            COUNTRY_SUMMARY_PATH = DATA_DIR / "country_pattern_summary.csv"
+
+            RAW_DATA_PATH
+            """
+        ),
+        markdown_cell(
+            """
+            ## Step 1: Load, filter, and classify events
+
+            `prepare_analysis_data()` performs the shared cleaning logic:
+
+            - loads the raw ACLED CSV,
+            - keeps `Middle East` and `Northern Africa`,
+            - drops rows missing core fields,
+            - parses dates,
+            - creates capital-area and remote-violence indicators,
+            - calculates distance to international land borders using Natural Earth boundaries,
+            - creates border-proximate and spatial-bucket variables.
+            """
+        ),
+        code_cell(
+            """
+            processed = prepare_analysis_data()
+            processed.to_csv(PROCESSED_PATH, index=False)
+
+            processed.shape, PROCESSED_PATH
+            """
+        ),
+        markdown_cell(
+            """
+            ## Step 2: Create the report sample
+
+            The processed event-level file keeps the cleaned event records. The final report's analytical sample excludes 2025 and uses 1997-2024, matching the text and published webpage.
+            """
+        ),
+        code_cell(
+            """
+            report_df = processed[processed["year"].between(1997, 2024)].copy()
+
+            {
+                "processed_rows": len(processed),
+                "report_rows_1997_2024": len(report_df),
+                "min_year": int(report_df["year"].min()),
+                "max_year": int(report_df["year"].max()),
+            }
+            """
+        ),
+        markdown_cell(
+            """
+            ## Step 3: Write summary CSV files
+
+            These summaries support the report figures and aggregate claims.
+            """
+        ),
+        code_cell(
+            """
+            yearly = summarize_yearly(report_df)
+            spatial = summarize_spatial_bucket(report_df)
+            country = summarize_country_patterns(report_df)
+
+            yearly.to_csv(YEARLY_SUMMARY_PATH, index=False)
+            spatial.to_csv(SPATIAL_SUMMARY_PATH, index=False)
+            country.to_csv(COUNTRY_SUMMARY_PATH, index=False)
+
+            [YEARLY_SUMMARY_PATH, SPATIAL_SUMMARY_PATH, COUNTRY_SUMMARY_PATH]
+            """
+        ),
+        markdown_cell(
+            """
+            ## Step 4: Sanity checks
+
+            These checks reproduce the headline counts cited in the report.
+            """
+        ),
+        code_cell(
+            """
+            checks = {
+                "all_events_1997_2024": len(report_df),
+                "border_proximate_events": int(report_df["is_border_proximate"].sum()),
+                "capital_area_events": int(report_df["is_capital_area"].sum()),
+                "overlap_events": int((report_df["is_border_proximate"] & report_df["is_capital_area"]).sum()),
+                "noncapital_border_proximate_events": int((report_df["is_border_proximate"] & ~report_df["is_capital_area"]).sum()),
+                "capital_remote_events": int(report_df["capital_remote_event"].sum()),
+            }
+
+            checks
+            """
+        ),
+        code_cell(
+            """
+            yearly.tail()
+            """
+        ),
+    ]
+)
+
+
+ANALYSIS_NOTEBOOK = notebook(
+    [
+        markdown_cell(
+            """
+            # 02 Analysis
+
+            This notebook uses the processed data and summary CSV files to reproduce the core analysis behind the interactive report in `docs/index.html`.
+            """
+        ),
+        code_cell(
+            """
+            from pathlib import Path
+            import sys
+
+            import pandas as pd
+            import plotly.graph_objects as go
+
+            ROOT_DIR = Path.cwd()
+            if ROOT_DIR.name == "code":
+                ROOT_DIR = ROOT_DIR.parent
+
+            CODE_DIR = ROOT_DIR / "code"
+            DATA_DIR = ROOT_DIR / "data"
+            if str(CODE_DIR) not in sys.path:
+                sys.path.insert(0, str(CODE_DIR))
+
+            from project_utils import build_geography_map_figure
+
+            processed = pd.read_csv(DATA_DIR / "acled_mena_processed.csv", parse_dates=["event_date"])
+            yearly = pd.read_csv(DATA_DIR / "yearly_shift_summary.csv")
+            spatial = pd.read_csv(DATA_DIR / "spatial_bucket_summary.csv")
+            country = pd.read_csv(DATA_DIR / "country_pattern_summary.csv")
+
+            report_df = processed[processed["year"].between(1997, 2024)].copy()
+            report_df.shape
+            """
+        ),
+        markdown_cell(
+            """
+            ## Research question
+
+            Has the rise of drones and other remote attacks in the Middle East and North Africa been accompanied by a spatial shift from border-proximate conflict toward attacks on capital areas?
+
+            The analysis is descriptive rather than causal: it evaluates whether the observed spatial distribution of events is consistent with a shift toward capital targeting.
+            """
+        ),
+        code_cell(
+            """
+            headline = {
+                "all_events": len(report_df),
+                "border_proximate_events": int(report_df["is_border_proximate"].sum()),
+                "border_proximate_share_pct": round(report_df["is_border_proximate"].mean() * 100, 2),
+                "capital_area_events": int(report_df["is_capital_area"].sum()),
+                "capital_area_share_pct": round(report_df["is_capital_area"].mean() * 100, 2),
+                "capital_remote_events": int(report_df["capital_remote_event"].sum()),
+                "capital_remote_share_of_remote_pct": round(
+                    report_df["capital_remote_event"].sum() / report_df["is_remote"].sum() * 100, 2
+                ),
+            }
+
+            headline
+            """
+        ),
+        markdown_cell(
+            """
+            ## Figure 1: Within remote attacks
+
+            Border-proximate remote violence remains much more common than capital-area remote violence across most of the period.
+            """
+        ),
+        code_cell(
+            """
+            remote_yearly = (
+                report_df.groupby("year")
+                .agg(
+                    all_remote_events=("is_remote", "sum"),
+                    border_remote_events=("is_border_proximate", lambda x: int((x & report_df.loc[x.index, "is_remote"]).sum())),
+                    capital_remote_events=("capital_remote_event", "sum"),
+                )
+                .reset_index()
+            )
+            remote_yearly["border_remote_share_pct"] = (
+                remote_yearly["border_remote_events"] / remote_yearly["all_remote_events"] * 100
+            ).round(2)
+            remote_yearly["capital_remote_share_pct"] = (
+                remote_yearly["capital_remote_events"] / remote_yearly["all_remote_events"] * 100
+            ).round(2)
+
+            fig1 = go.Figure()
+            fig1.add_trace(
+                go.Scatter(
+                    x=remote_yearly["year"],
+                    y=remote_yearly["border_remote_share_pct"],
+                    mode="lines+markers",
+                    name="Border-proximate share of remote attacks",
+                    line={"color": "#1f4e79", "width": 3.2},
+                )
+            )
+            fig1.add_trace(
+                go.Scatter(
+                    x=remote_yearly["year"],
+                    y=remote_yearly["capital_remote_share_pct"],
+                    mode="lines+markers",
+                    name="Capital-area share of remote attacks",
+                    line={"color": "#c44536", "width": 3.0},
+                )
+            )
+            fig1.update_layout(
+                title="Within remote attacks, border-proximate share remains above capital-area share",
+                template="plotly_white",
+                xaxis_title="Year",
+                yaxis_title="Share (%)",
+                legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0},
+            )
+            fig1.show()
+            """
+        ),
+        markdown_cell(
+            """
+            ## Figure 2: Yearly all-event denominator
+
+            This figure uses yearly shares of all events. The blue segment uses non-capital border-proximate events so the stacked bars do not double-count locations that are both capital-area and border-proximate.
+            """
+        ),
+        code_cell(
+            """
+            yearly_geo = (
+                report_df.assign(noncapital_border=report_df["is_border_proximate"] & ~report_df["is_capital_area"])
+                .groupby("year")
+                .agg(
+                    all_events=("event_id_cnty", "count"),
+                    noncapital_border_events=("noncapital_border", "sum"),
+                    capital_area_events=("is_capital_area", "sum"),
+                )
+                .reset_index()
+            )
+            yearly_geo["noncapital_border_share_pct"] = (
+                yearly_geo["noncapital_border_events"] / yearly_geo["all_events"] * 100
+            ).round(2)
+            yearly_geo["capital_area_share_pct"] = (
+                yearly_geo["capital_area_events"] / yearly_geo["all_events"] * 100
+            ).round(2)
+
+            fig2 = go.Figure()
+            fig2.add_trace(
+                go.Bar(
+                    x=yearly_geo["year"],
+                    y=yearly_geo["noncapital_border_share_pct"],
+                    name="Non-capital border-proximate share",
+                    marker={"color": "#1f4e79"},
+                )
+            )
+            fig2.add_trace(
+                go.Bar(
+                    x=yearly_geo["year"],
+                    y=yearly_geo["capital_area_share_pct"],
+                    name="Capital-area share",
+                    marker={"color": "#c44536"},
+                )
+            )
+            fig2.update_layout(
+                title="Yearly all-event shares: border-proximate space remains heavier than capital space",
+                template="plotly_white",
+                barmode="stack",
+                xaxis_title="Year",
+                yaxis_title="Share of all events (%)",
+                legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0},
+            )
+            fig2.show()
+            """
+        ),
+        markdown_cell(
+            """
+            ## Summary tables
+
+            The summary CSV files provide the aggregate values used in the report narrative.
+            """
+        ),
+        code_cell(
+            """
+            spatial
+            """
+        ),
+        code_cell(
+            """
+            country.head(10)
+            """
+        ),
+        markdown_cell(
+            """
+            ## Figure 4 map
+
+            The published HTML report uses a simplified yearly map slider. The helper below builds the full Plotly map from the processed event-level data.
+            """
+        ),
+        code_cell(
+            """
+            # This can be browser-heavy because it plots event-level geography.
+            # Uncomment to render inside the notebook.
+            # build_geography_map_figure(report_df).show()
+            """
+        ),
+        markdown_cell(
+            """
+            ## Conclusion
+
+            The evidence supports one stable conclusion: border-linked space remains the heavier conflict geography in MENA relative to capital space. The data do not support a simple regional story in which conflict moved from borders to capitals.
+            """
+        ),
+    ]
+)
+
+
+def write_notebook(path: Path, contents: dict) -> None:
+    path.write_text(json.dumps(contents, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote notebook to {path}")
 
 
 def main() -> None:
-    output_path = Path(__file__).resolve().parent / "01_conflict_shift_analysis.ipynb"
-    output_path.write_text(json.dumps(NOTEBOOK, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote notebook to {output_path}")
+    output_dir = Path(__file__).resolve().parent
+    write_notebook(output_dir / "01_data_cleaning.ipynb", DATA_CLEANING_NOTEBOOK)
+    write_notebook(output_dir / "02_analysis.ipynb", ANALYSIS_NOTEBOOK)
 
 
 if __name__ == "__main__":

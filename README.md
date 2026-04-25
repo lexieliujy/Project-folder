@@ -12,9 +12,10 @@ This repository contains the final project files for POLI3148: Data Science in P
 
 ## Code
 
-- [`code/01_conflict_shift_analysis.ipynb`](code/01_conflict_shift_analysis.ipynb): notebook mirror of the finalized report narrative.
+- [`code/01_data_cleaning.ipynb`](code/01_data_cleaning.ipynb): documents how the raw ACLED export is cleaned and how the processed and summary CSV files are generated.
+- [`code/02_analysis.ipynb`](code/02_analysis.ipynb): reproduces the main analysis, summary checks, and figures used in the report.
 - [`code/project_utils.py`](code/project_utils.py): shared data cleaning, geographic classification, and plotting utilities.
-- [`code/Z_create_notebook.py`](code/Z_create_notebook.py): regenerates the notebook mirror.
+- [`code/Z_create_notebook.py`](code/Z_create_notebook.py): regenerates the two project notebooks.
 - [`code/Z_generate_report.py`](code/Z_generate_report.py): syncs the finalized DOCX manuscript into `docs/index.html`.
 
 ## Data

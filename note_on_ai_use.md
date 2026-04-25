@@ -8,7 +8,7 @@ AI support was mainly used for:
 
 - converting and synchronizing the final manuscript into the project HTML format,
 - updating the Figure 4 map interaction so the time slider shows yearly rather than cumulative event points,
-- regenerating the notebook mirror and aligning `README.md` and other supporting documentation with the final submission baseline,
+- regenerating the data-cleaning and analysis notebooks and aligning `README.md` and other supporting documentation with the final submission baseline,
 - consolidating multiple draft versions into one canonical baseline,
 - removing outdated duplicate files to keep a clean, reproducible folder structure,
 - preparing synchronized project files for GitHub publication.
