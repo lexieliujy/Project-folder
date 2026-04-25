@@ -67,9 +67,14 @@ DATA_CLEANING_NOTEBOOK = notebook(
 
             import pandas as pd
 
-            ROOT_DIR = Path.cwd()
-            if ROOT_DIR.name == "code":
-                ROOT_DIR = ROOT_DIR.parent
+            def find_project_root(start: Path) -> Path:
+                for candidate in [start, *start.parents]:
+                    if (candidate / "code" / "project_utils.py").exists() and (candidate / "data").exists():
+                        return candidate
+                raise FileNotFoundError("Could not find the project root folder.")
+
+
+            ROOT_DIR = find_project_root(Path.cwd())
 
             CODE_DIR = ROOT_DIR / "code"
             DATA_DIR = ROOT_DIR / "data"
@@ -201,9 +206,14 @@ ANALYSIS_NOTEBOOK = notebook(
             import pandas as pd
             import plotly.graph_objects as go
 
-            ROOT_DIR = Path.cwd()
-            if ROOT_DIR.name == "code":
-                ROOT_DIR = ROOT_DIR.parent
+            def find_project_root(start: Path) -> Path:
+                for candidate in [start, *start.parents]:
+                    if (candidate / "code" / "project_utils.py").exists() and (candidate / "data").exists():
+                        return candidate
+                raise FileNotFoundError("Could not find the project root folder.")
+
+
+            ROOT_DIR = find_project_root(Path.cwd())
 
             CODE_DIR = ROOT_DIR / "code"
             DATA_DIR = ROOT_DIR / "data"
