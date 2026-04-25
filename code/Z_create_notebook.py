@@ -92,9 +92,6 @@ DATA_CLEANING_NOTEBOOK = notebook(
 
             from project_utils import (
                 prepare_analysis_data,
-                summarize_country_patterns,
-                summarize_spatial_bucket,
-                summarize_yearly,
             )
 
             RAW_DATA_PATH = DATA_DIR / "ACLED Data_MENA_Raw.csv"
@@ -158,21 +155,132 @@ DATA_CLEANING_NOTEBOOK = notebook(
         ),
         markdown_cell(
             """
-            ## Step 3: Write summary CSV files
+            ## Step 3: Build and write summary CSV files
 
-            These summaries support the report figures and aggregate claims.
+            I create three summary files from `report_df` so the report can use smaller, interpretable tables instead of recalculating everything from the event-level dataset each time.
+            """
+        ),
+        markdown_cell(
+            """
+            ### 3.1 Yearly summary
+
+            I group events by `year` to count the main event categories used in the trend figures: all events, battles, remote violence, air/drone strikes, capital-area remote attacks, and border-proximate battles. I then calculate percentage columns by dividing each focal count by its relevant yearly denominator.
             """
         ),
         code_cell(
             """
-            yearly = summarize_yearly(report_df)
-            spatial = summarize_spatial_bucket(report_df)
-            country = summarize_country_patterns(report_df)
+            years = pd.Index(
+                range(int(report_df["year"].min()), int(report_df["year"].max()) + 1),
+                name="year",
+            )
+            yearly = pd.DataFrame(index=years)
+
+            yearly["all_events"] = report_df.groupby("year").size()
+            yearly["all_battles"] = report_df[report_df["is_battle"]].groupby("year").size()
+            yearly["all_remote_events"] = report_df[report_df["is_remote"]].groupby("year").size()
+            yearly["drone_events"] = report_df[
+                report_df["sub_event_type"].eq("Air/drone strike")
+            ].groupby("year").size()
+            yearly["capital_remote_events"] = report_df[
+                report_df["capital_remote_event"]
+            ].groupby("year").size()
+            yearly["border_battle_events"] = report_df[
+                report_df["border_battle_event"]
+            ].groupby("year").size()
+            yearly["capital_remote_fatalities"] = report_df[
+                report_df["capital_remote_event"]
+            ].groupby("year")["fatalities"].sum()
+            yearly["border_battle_fatalities"] = report_df[
+                report_df["border_battle_event"]
+            ].groupby("year")["fatalities"].sum()
+
+            yearly = yearly.fillna(0).astype(int).reset_index()
+            yearly["capital_share_of_remote_pct"] = (
+                yearly["capital_remote_events"] / yearly["all_remote_events"].replace(0, pd.NA) * 100
+            ).fillna(0).round(2)
+            yearly["border_share_of_battles_pct"] = (
+                yearly["border_battle_events"] / yearly["all_battles"].replace(0, pd.NA) * 100
+            ).fillna(0).round(2)
+            yearly["drone_share_of_remote_pct"] = (
+                yearly["drone_events"] / yearly["all_remote_events"].replace(0, pd.NA) * 100
+            ).fillna(0).round(2)
 
             yearly.to_csv(YEARLY_SUMMARY_PATH, index=False)
-            spatial.to_csv(SPATIAL_SUMMARY_PATH, index=False)
-            country.to_csv(COUNTRY_SUMMARY_PATH, index=False)
+            yearly.head()
+            """
+        ),
+        markdown_cell(
+            """
+            ### 3.2 Spatial-bucket summary
 
+            I group events by `spatial_bucket` to compare capital areas, border-proximate areas, and other areas. For each bucket, I count total events, fatalities, remote events, and battles, then calculate the share of events in that bucket that are remote violence or battles.
+            """
+        ),
+        code_cell(
+            """
+            spatial = (
+                report_df.groupby("spatial_bucket")
+                .agg(
+                    events=("event_id_cnty", "count"),
+                    fatalities=("fatalities", "sum"),
+                    remote_events=("is_remote", "sum"),
+                    battles=("is_battle", "sum"),
+                )
+                .reset_index()
+            )
+            spatial["remote_share_pct"] = (
+                spatial["remote_events"] / spatial["events"] * 100
+            ).round(2)
+            spatial["battle_share_pct"] = (
+                spatial["battles"] / spatial["events"] * 100
+            ).round(2)
+            spatial = spatial.sort_values("events", ascending=False)
+
+            spatial.to_csv(SPATIAL_SUMMARY_PATH, index=False)
+            spatial
+            """
+        ),
+        markdown_cell(
+            """
+            ### 3.3 Country-level summary
+
+            I group events by `country` to compare how conflict patterns vary across countries. For each country, I calculate total events, remote events, capital-area remote attacks, border-proximate battles, fatalities, and two percentage measures: remote events as a share of all events, and capital-area remote attacks as a share of remote events.
+            """
+        ),
+        code_cell(
+            """
+            country = (
+                report_df.groupby("country")
+                .agg(
+                    total_events=("event_id_cnty", "count"),
+                    remote_events=("is_remote", "sum"),
+                    capital_remote_events=("capital_remote_event", "sum"),
+                    border_battle_events=("border_battle_event", "sum"),
+                    fatalities=("fatalities", "sum"),
+                )
+                .reset_index()
+            )
+            country["remote_share_pct"] = (
+                country["remote_events"] / country["total_events"] * 100
+            ).round(2)
+            country["capital_remote_share_pct"] = (
+                country["capital_remote_events"] / country["remote_events"].replace(0, pd.NA) * 100
+            ).fillna(0).round(2)
+            country = country.sort_values("total_events", ascending=False)
+
+            country.to_csv(COUNTRY_SUMMARY_PATH, index=False)
+            country.head()
+            """
+        ),
+        markdown_cell(
+            """
+            ### 3.4 Output paths
+
+            I display the output paths to confirm where the three summary CSV files were written.
+            """
+        ),
+        code_cell(
+            """
             [YEARLY_SUMMARY_PATH, SPATIAL_SUMMARY_PATH, COUNTRY_SUMMARY_PATH]
             """
         ),
