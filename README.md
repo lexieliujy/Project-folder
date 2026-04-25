@@ -8,9 +8,9 @@ Public webpage: <https://lexieliujy.github.io/POLI3148_PS1/>
 
 Repository: <https://github.com/lexieliujy/POLI3148_PS1>
 
-## Notice
+## Project note
 
-This is a course project for POLI 3148: Data Science in Politics and Public Administration. It is not a peer-reviewed research publication.
+This repository is my POLI 3148 Assignment 1 data project submission. It contains the data, notebooks, and public webpage required for the assignment.
 
 The analysis is descriptive. It does not claim to establish a causal relationship between remote attack technologies and the geography of conflict. The report uses ACLED event data and Natural Earth boundary data to build reproducible spatial indicators, then compares patterns across time and space.
 
