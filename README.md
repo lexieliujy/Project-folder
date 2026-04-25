@@ -34,9 +34,16 @@ See [`note_on_ai_use.md`](note_on_ai_use.md) for the AI use statement.
 | [`data/spatial_bucket_summary.csv`](data/spatial_bucket_summary.csv) | Summary table comparing capital areas, border-proximate areas, and other areas. |
 | [`data/country_pattern_summary.csv`](data/country_pattern_summary.csv) | Country-level summary statistics. |
 | [`data/support/ne_50m_admin_0_countries.zip`](data/support/ne_50m_admin_0_countries.zip) | Natural Earth country boundary data used for border-distance calculations. |
+| [`requirements.txt`](requirements.txt) | Python packages needed to run the two notebooks on another computer. |
 | [`note_on_ai_use.md`](note_on_ai_use.md) | Statement describing how AI assistance was used in the project workflow. |
 
 ## Running the project
+
+Install the required Python packages first:
+
+```bash
+pip install -r requirements.txt
+```
 
 Run the notebooks in order:
 
