@@ -1,28 +1,33 @@
 # POLI3148 Assignment 1 Project
 
-## Final baseline (2026-04-25)
+This repository contains the final project files for POLI3148: Data Science in Politics and Public Administration.
 
-This repository now keeps a single final report baseline based on:
+## Report
 
-- Source manuscript: `/Users/lexieliu/Desktop/POLI3148/Assignment 1/Expanded Report text.docx`
-- Published HTML report: [`docs/index.html`](docs/index.html)
+- [`docs/index.html`](docs/index.html): canonical final HTML report for submission and GitHub Pages.
+- [`note_on_ai_use.md`](note_on_ai_use.md): final AI use statement.
 
-All previous draft/versioned duplicates have been removed, and this version is the canonical submission copy. The Figure 4 map in the webpage now uses a yearly time slider, so it shows per-year event points rather than cumulative totals.
+## Code
 
-## Key files
+- [`code/01_conflict_shift_analysis.ipynb`](code/01_conflict_shift_analysis.ipynb): notebook mirror of the finalized report narrative.
+- [`code/project_utils.py`](code/project_utils.py): shared data cleaning, geographic classification, and plotting utilities.
+- [`code/Z_create_notebook.py`](code/Z_create_notebook.py): regenerates the notebook mirror.
+- [`code/Z_generate_report.py`](code/Z_generate_report.py): syncs the finalized DOCX manuscript into `docs/index.html`.
 
-- [`docs/index.html`](docs/index.html): final report webpage (canonical)
-- [`code/01_conflict_shift_analysis.ipynb`](code/01_conflict_shift_analysis.ipynb): one-cell notebook mirror of the finalized report text
-- [`code/Z_create_notebook.py`](code/Z_create_notebook.py): regenerates the notebook mirror to stay aligned with the final report baseline
-- [`code/Z_generate_report.py`](code/Z_generate_report.py): syncs the finalized DOCX manuscript into [`docs/index.html`](docs/index.html)
-- [`code/project_utils.py`](code/project_utils.py): analysis utilities
-- [`data/ACLED Data_MENA_Raw.csv`](data/ACLED%20Data_MENA_Raw.csv): raw dataset
-- [`data/acled_mena_processed.csv`](data/acled_mena_processed.csv): processed dataset
-- [`note_on_ai_use.md`](note_on_ai_use.md): final AI use statement
+## Data
 
-## Data scope
+- [`data/ACLED Data_MENA_Raw.csv`](data/ACLED%20Data_MENA_Raw.csv): raw ACLED MENA export used as the primary source data.
+- [`data/acled_mena_processed.csv`](data/acled_mena_processed.csv): processed event-level dataset after filtering and cleaning.
+- [`data/yearly_shift_summary.csv`](data/yearly_shift_summary.csv): yearly comparison table used for report figures.
+- [`data/spatial_bucket_summary.csv`](data/spatial_bucket_summary.csv): event composition across capital, border-proximate, and other areas.
+- [`data/country_pattern_summary.csv`](data/country_pattern_summary.csv): country-level summary statistics.
+- [`data/support/ne_50m_admin_0_countries.zip`](data/support/ne_50m_admin_0_countries.zip): Natural Earth country boundary support data.
 
-The analytical sample combines both `Middle East` and `Northern Africa` and follows the final cleaned specification used in the report.
+The analytical sample combines `Middle East` and `Northern Africa` ACLED records from 1997-2024. Large CSV files are tracked with Git LFS.
+
+## Notes
+
+The final webpage's Figure 4 map uses a yearly time slider, so each selected year shows only that year's event points rather than cumulative totals.
 
 ## Author
 

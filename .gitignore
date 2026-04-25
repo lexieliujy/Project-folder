@@ -30,6 +30,4 @@ data/raw/
 
 # Keep repository lightweight for GitHub while preserving local files
 code/vendor/
-data/ACLED Data_MENA_Raw*.csv
 data/ACLED Data_MENA_Raw*.numbers
-data/acled_mena_processed*.csv
