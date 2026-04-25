@@ -26,8 +26,11 @@ See [`Note on AI Use.pdf`](Note%20on%20AI%20Use.pdf) for the AI use statement.
 | File | Purpose |
 | --- | --- |
 | [`docs/index.html`](docs/index.html) | Final interactive HTML report served through GitHub Pages. |
+| [`docs/figure4_monitor_map.html`](docs/figure4_monitor_map.html) | Standalone Figure 4 interactive monitor map embedded in the report. |
+| [`docs/figure4_monitor_data.js`](docs/figure4_monitor_data.js) | Compact JavaScript data bundle used by the Figure 4 monitor map. |
 | [`code/01_data_cleaning.ipynb`](code/01_data_cleaning.ipynb) | Cleans the raw ACLED data, creates spatial indicators, and writes the processed and summary CSV files. |
 | [`code/02_analysis.ipynb`](code/02_analysis.ipynb) | Reproduces the headline checks, analysis tables, and figures used in the report. |
+| [`code/build_figure4_monitor.py`](code/build_figure4_monitor.py) | Builds the standalone Figure 4 Leaflet/Plotly monitor map and data bundle. |
 | [`data/ACLED Data_MENA_Raw.csv`](data/ACLED%20Data_MENA_Raw.csv) | Raw ACLED MENA export used as the primary source data. |
 | [`data/acled_mena_processed.csv`](data/acled_mena_processed.csv) | Cleaned event-level dataset with added spatial and event-type indicators. |
 | [`data/yearly_shift_summary.csv`](data/yearly_shift_summary.csv) | Yearly summary table used for the time-series figures. |
@@ -62,7 +65,7 @@ The first notebook writes:
 - `data/spatial_bucket_summary.csv`
 - `data/country_pattern_summary.csv`
 
-The second notebook reads those files and reproduces the analysis checks and figures.
+The second notebook reads those files, reproduces the analysis checks and figures, and rebuilds the Figure 4 interactive monitor map assets in `docs/`.
 
 Large CSV files are tracked with Git LFS. If a CSV opens as a small text pointer beginning with `version https://git-lfs`, run:
 
