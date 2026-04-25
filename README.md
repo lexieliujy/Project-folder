@@ -117,6 +117,7 @@ The main descriptive conclusion is that border-linked space remains the heavier 
 
 ## Author
 
-Lexie Liu  
+Liu Jing Yi  
+UID: 3035844247  
 POLI 3148: Data Science in Politics and Public Administration  
 Spring 2026
