@@ -30,7 +30,6 @@ See [`Note on AI Use.pdf`](Note%20on%20AI%20Use.pdf) for the AI use statement.
 | [`docs/figure4_monitor_data.js`](docs/figure4_monitor_data.js) | Compact JavaScript data bundle used by the Figure 4 monitor map. |
 | [`code/01_data_cleaning.ipynb`](code/01_data_cleaning.ipynb) | Cleans the raw ACLED data, creates spatial indicators, and writes the processed and summary CSV files. |
 | [`code/02_analysis.ipynb`](code/02_analysis.ipynb) | Reproduces the headline checks, analysis tables, and figures used in the report. |
-| [`code/build_figure4_monitor.py`](code/build_figure4_monitor.py) | Builds the standalone Figure 4 Leaflet/Plotly monitor map and data bundle. |
 | [`data/ACLED Data_MENA_Raw.csv`](data/ACLED%20Data_MENA_Raw.csv) | Raw ACLED MENA export used as the primary source data. |
 | [`data/acled_mena_processed.csv`](data/acled_mena_processed.csv) | Cleaned event-level dataset with added spatial and event-type indicators. |
 | [`data/yearly_shift_summary.csv`](data/yearly_shift_summary.csv) | Yearly summary table used for the time-series figures. |
